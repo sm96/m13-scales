@@ -7,6 +7,7 @@ $(function() {
         var type = 'binge';
 
         // Filter data down
+        var filter = (function(sex, type){
         var data = allData.filter(function(d) {
                 return d.type == type && d.sex == sex
             })
@@ -17,7 +18,7 @@ $(function() {
                 if (a.state_name > b.state_name) return 1;
                 return 0;
             });
-
+        });
         // Margin: how much space to put in the SVG for axes/titles
         var margin = {
             left: 70,
@@ -126,6 +127,7 @@ $(function() {
         });
         g.call(tip);
 
+    var draw = (function(data){
         // Store the data-join in a function: make sure to set the scales and update the axes in your function.
         // Select all rects and bind data
         var bars = g.selectAll('rect').data(data);
@@ -145,5 +147,30 @@ $(function() {
             .attr('height', function(d) {
                 return drawHeight - yScale(d.percent);
             });
+        });
+            $('button').on('click', function() {
+            var btn = $(this).attr(".btn group #sex");
+            var btn2 = $(this).attr(".btn group #type");
+            switch(btn){
+              case 'male-any':
+                var data1 = filter('male', 'any');
+                draw(data);
+                break;
+              case 'female-any':
+                var data2 = filter('female', 'any');
+                draw(data2);
+                break;
+              case 'male-binge':
+                var data3 = filter('male', 'binge');
+                draw(data3);
+                break;
+              case 'female-binge':
+                var data4 = filter('female', 'binge');
+                draw(data4);
+                break;
+              default:
+                break;
+            };
+
     });
 });
